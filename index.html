@@ -3,180 +3,191 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Avon Fashions Payment</title>
+<title>Smart World Solution Payment</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 <style>
-    body {
-        background: linear-gradient(to bottom, #f4f6f9, #e0f2f1);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        min-height: 100vh;
-        font-family: 'Arial', sans-serif;
-        padding: 15px;
-    }
+/* ---------- Body & Background ---------- */
+body {
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(to bottom, #a0d8ef, #00a859);
+    overflow: hidden;
+}
 
-    .payment-card {
-        background: #fff;
-        border-radius: 15px;
-        box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-        width: 100%;
-        max-width: 420px;
-        padding: 25px;
-        transition: all 0.3s ease;
-    }
+/* Water droplets effect */
+.droplet {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: rgba(255,255,255,0.7);
+    border-radius: 50%;
+    animation: drop 4s infinite linear;
+}
+@keyframes drop {
+    0% { transform: translateY(-10px); opacity: 0; }
+    50% { opacity: 1; }
+    100% { transform: translateY(100vh); opacity: 0; }
+}
 
-    .payment-card h2 {
-        color: #00a859;
-        text-align: center;
-        font-size: 1.6rem;
-        margin-bottom: 20px;
-        font-weight: bold;
-    }
+/* ---------- Payment Card ---------- */
+.payment-card {
+    background: rgba(255,255,255,0.95);
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    width: 100%;
+    max-width: 360px;
+    padding: 25px 20px;
+    transition: all 0.3s ease;
+}
 
-    .form-control {
-        border-radius: 10px;
-        padding: 10px;
-        font-size: 0.95rem;
-    }
+/* ---------- Card Header ---------- */
+.payment-card h2 {
+    color: #00a859;
+    text-align: center;
+    font-size: 1.6rem;
+    margin-bottom: 20px;
+    font-weight: bold;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
 
-    .pay-btn {
-        background-color: #00a859;
-        border: none;
-        width: 100%;
-        font-size: 1rem;
-        padding: 12px;
-        border-radius: 10px;
-        transition: all 0.3s ease;
-        font-weight: bold;
-    }
+/* ---------- Form Controls ---------- */
+.form-control {
+    border-radius: 10px;
+    padding: 10px;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+}
+.form-control:focus {
+    box-shadow: 0 0 8px rgba(0,168,89,0.6);
+    border-color: #00a859;
+}
 
-    .pay-btn:disabled {
-        background-color: #a5d6a7;
-        cursor: not-allowed;
-    }
+/* ---------- Glowing Button ---------- */
+.pay-btn {
+    background-color: #00a859;
+    border: none;
+    width: 100%;
+    font-size: 1.05rem;
+    padding: 12px;
+    border-radius: 10px;
+    font-weight: bold;
+    color: #fff;
+    text-transform: uppercase;
+    box-shadow: 0 0 20px rgba(0,168,89,0.6);
+    animation: glow 1.2s infinite alternate;
+    transition: all 0.3s ease;
+}
+.pay-btn:disabled {
+    background-color: #a5d6a7;
+    box-shadow: none;
+    cursor: not-allowed;
+}
+.pay-btn:hover:enabled {
+    transform: scale(1.05);
+    box-shadow: 0 0 30px rgba(0,168,89,0.9), 0 0 60px rgba(0,168,89,0.5);
+}
+@keyframes glow {
+    0% { box-shadow: 0 0 15px rgba(0,168,89,0.5); }
+    100% { box-shadow: 0 0 25px rgba(0,168,89,1); }
+}
 
-    .pay-btn:hover:enabled {
-        background-color: #008f4a;
-    }
+/* ---------- Footer ---------- */
+.footer-box {
+    margin-top: 15px;
+    text-align: center;
+    font-size: 0.8rem;
+    color: #444;
+}
 
-    .footer-box {
-        margin-top: 15px;
-        text-align: center;
-        font-size: 0.8rem;
-        color: #666;
-    }
-
-    @media (max-width: 480px) {
-        .payment-card {
-            max-width: 320px;
-            padding: 18px;
-        }
-        .payment-card h2 {
-            font-size: 1.4rem;
-        }
-        .pay-btn {
-            padding: 10px;
-            font-size: 0.95rem;
-        }
-    }
-
-    @media (max-width: 360px) {
-        .payment-card {
-            max-width: 280px;
-            padding: 15px;
-        }
-        .payment-card h2 {
-            font-size: 1.3rem;
-        }
-        .pay-btn {
-            padding: 9px;
-            font-size: 0.9rem;
-        }
-    }
+/* ---------- Responsive ---------- */
+@media (max-width: 480px) {
+    .payment-card { max-width: 300px; padding: 18px; }
+    .payment-card h2 { font-size: 1.4rem; }
+    .pay-btn { padding: 10px; font-size: 1rem; }
+}
+@media (max-width: 360px) {
+    .payment-card { max-width: 260px; padding: 15px; }
+    .payment-card h2 { font-size: 1.3rem; }
+    .pay-btn { padding: 9px; font-size: 0.95rem; }
+}
 </style>
 </head>
 <body>
 
-<div class="payment-card">
-    <h2>Avon Payment Gateway</h2>
-    <form id="paymentForm" novalidate>
-        <div class="mb-2">
-            <input type="text" class="form-control form-control-sm" id="fullName" placeholder="Enter your Name" required>
-        </div>
-        <div class="mb-2">
-            <input type="tel" maxlength="10" pattern="\d{10}" class="form-control form-control-sm" id="phoneNumber" placeholder="Enter Number" required>
-        </div>
-       <div class="mb-2">
-    <label for="deliveryDate" class="form-label">Delivery Date</label>
-         
-    <input type="date" class="form-control form-control-sm" id="deliveryDate" required>
-    
-</div>
+<!-- Water droplets -->
+<div id="droplets-container"></div>
 
-        <div class="mb-2">
+<div class="payment-card">
+    <h2>Smart World Solution</h2>
+    <form id="paymentForm" novalidate>
+        <div class="mb-3">
+            <input type="text" class="form-control form-control-sm" id="fullName" placeholder="Your name" required>
+        </div>
+        <div class="mb-3">
+            <input type="tel" maxlength="10" pattern="\d{10}" class="form-control form-control-sm" id="phoneNumber" placeholder="Enter phone" required>
+        </div>
+        <div class="mb-3">
             <input type="number" class="form-control form-control-sm" id="amount" placeholder="Amount" required>
         </div>
         <button type="button" class="btn pay-btn" id="payBtn" disabled>Pay Now</button>
     </form>
-    <div class="footer-box">© 2025 Avon Fashions. All Rights Reserved.</div>
+    <div class="footer-box">© 2025 Smart World Solution. All Rights Reserved.</div>
 </div>
 
 <script>
+// ---------- Water Droplets ----------
+const container = document.getElementById('droplets-container');
+for(let i=0;i<60;i++){
+    const drop = document.createElement('div');
+    drop.classList.add('droplet');
+    drop.style.left = Math.random()*100 + 'vw';
+    drop.style.animationDuration = 2 + Math.random()*3 + 's';
+    drop.style.animationDelay = Math.random()*5 + 's';
+    drop.style.width = drop.style.height = 2 + Math.random()*5 + 'px';
+    container.appendChild(drop);
+}
+
+// ---------- Form Validation ----------
 const fullName = document.getElementById("fullName");
 const phoneNumber = document.getElementById("phoneNumber");
-const deliveryDate = document.getElementById("deliveryDate");
 const amount = document.getElementById("amount");
 const payBtn = document.getElementById("payBtn");
 
-// Set min date to today
-document.addEventListener("DOMContentLoaded", () => {
-    const today = new Date().toISOString().split('T')[0];
-    deliveryDate.setAttribute('min', today);
-});
-
-// Enable button only if all fields are valid
 function validateFields() {
     const nameValid = fullName.value.trim().length > 0;
     const phoneValid = /^\d{10}$/.test(phoneNumber.value.trim());
-    const dateValid = deliveryDate.value >= deliveryDate.min;
     const amountValid = amount.value.trim().length > 0 && Number(amount.value) > 0;
-
-    payBtn.disabled = !(nameValid && phoneValid && dateValid && amountValid);
+    payBtn.disabled = !(nameValid && phoneValid && amountValid);
 }
+[fullName, phoneNumber, amount].forEach(input => input.addEventListener('input', validateFields));
 
-// Real-time validation
-[fullName, phoneNumber, deliveryDate, amount].forEach(input => {
-    input.addEventListener('input', validateFields);
-});
-
-// Payment redirect with 3-second loading and 15-second auto-clear
+// ---------- Payment Redirect ----------
 function redirectToPayHero() {
     payBtn.disabled = true;
     payBtn.innerText = "Processing Payment...";
 
     const accountId = "3513";     
-    const channelId = "4064";     
+    const channelId = "3990";     
     const name = fullName.value.trim();
     const phone = phoneNumber.value.trim();
     const amt = amount.value.trim();
-    const date = deliveryDate.value;
     const reference = "REF" + Date.now(); 
 
-    // 3-second delay before redirecting in the same tab
     setTimeout(() => {
         const url = `https://app.payhero.co.ke/lipwa/${accountId}?amount=${amt}&phone=${phone}&name=${encodeURIComponent(name)}&channel_id=${channelId}&reference=${reference}`;
-        window.location.href = url; // open in the same tab
+        window.location.href = url;
     }, 3000);
 
-    // Automatically reset form after 15 seconds
     setTimeout(() => {
         document.getElementById("paymentForm").reset();
         payBtn.disabled = true;
         payBtn.innerText = "Pay Now";
     }, 15000);
 }
-
 payBtn.addEventListener('click', redirectToPayHero);
 </script>
 
