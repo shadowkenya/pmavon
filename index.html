@@ -7,29 +7,37 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 <style>
     body {
-        background: #f4f6f9;
+        background: linear-gradient(to bottom, #f4f6f9, #e0f2f1);
         display: flex;
         justify-content: center;
         align-items: center;
         min-height: 100vh;
-        font-family: Arial, sans-serif;
+        font-family: 'Arial', sans-serif;
         padding: 15px;
     }
 
     .payment-card {
         background: #fff;
-        border-radius: 12px;
-        box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-        max-width: 400px;
+        border-radius: 15px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.15);
         width: 100%;
+        max-width: 420px;
         padding: 25px;
+        transition: all 0.3s ease;
     }
 
     .payment-card h2 {
         color: #00a859;
         text-align: center;
-        margin-bottom: 20px;
         font-size: 1.6rem;
+        margin-bottom: 20px;
+        font-weight: bold;
+    }
+
+    .form-control {
+        border-radius: 10px;
+        padding: 10px;
+        font-size: 0.95rem;
     }
 
     .pay-btn {
@@ -39,17 +47,52 @@
         font-size: 1rem;
         padding: 12px;
         border-radius: 10px;
+        transition: all 0.3s ease;
+        font-weight: bold;
     }
 
-    .pay-btn:hover {
+    .pay-btn:disabled {
+        background-color: #a5d6a7;
+        cursor: not-allowed;
+    }
+
+    .pay-btn:hover:enabled {
         background-color: #008f4a;
     }
 
     .footer-box {
         margin-top: 15px;
         text-align: center;
-        font-size: 0.85rem;
+        font-size: 0.8rem;
         color: #666;
+    }
+
+    @media (max-width: 480px) {
+        .payment-card {
+            max-width: 320px;
+            padding: 18px;
+        }
+        .payment-card h2 {
+            font-size: 1.4rem;
+        }
+        .pay-btn {
+            padding: 10px;
+            font-size: 0.95rem;
+        }
+    }
+
+    @media (max-width: 360px) {
+        .payment-card {
+            max-width: 280px;
+            padding: 15px;
+        }
+        .payment-card h2 {
+            font-size: 1.3rem;
+        }
+        .pay-btn {
+            padding: 9px;
+            font-size: 0.9rem;
+        }
     }
 </style>
 </head>
@@ -57,59 +100,80 @@
 
 <div class="payment-card">
     <h2>Avon Payment Gateway</h2>
-    <form id="paymentForm">
-        <div class="mb-3">
-            <label for="fullName" class="form-label">Full Name</label>
-            <input type="text" class="form-control" id="fullName" placeholder="Enter your name" required>
+    <form id="paymentForm" novalidate>
+        <div class="mb-2">
+            <input type="text" class="form-control form-control-sm" id="fullName" placeholder="Full Name" required>
         </div>
-        <div class="mb-3">
-            <label for="phoneNumber" class="form-label">Phone Number</label>
-            <input type="tel" class="form-control" id="phoneNumber" placeholder="Enter phone" required>
+        <div class="mb-2">
+            <input type="tel" maxlength="10" pattern="\d{10}" class="form-control form-control-sm" id="phoneNumber" placeholder="Phone Number (10 digits)" required>
         </div>
-        <div class="mb-3">
-            <label for="deliveryDate" class="form-label">Delivery Date</label>
-            <input type="date" class="form-control" id="deliveryDate" required>
+        <div class="mb-2">
+            <input type="date" class="form-control form-control-sm" id="deliveryDate" required>
         </div>
-        <div class="mb-3">
-            <label for="amount" class="form-label">Amount</label>
-            <input type="number" class="form-control" id="amount" placeholder="Enter amount" required>
+        <div class="mb-2">
+            <input type="number" class="form-control form-control-sm" id="amount" placeholder="Amount" required>
         </div>
-        <button type="button" class="btn pay-btn" onclick="redirectToPayHero()">Pay Now</button>
+        <button type="button" class="btn pay-btn" id="payBtn" disabled>Pay Now</button>
     </form>
     <div class="footer-box">© 2025 Avon Fashions. All Rights Reserved.</div>
 </div>
 
 <script>
+const fullName = document.getElementById("fullName");
+const phoneNumber = document.getElementById("phoneNumber");
+const deliveryDate = document.getElementById("deliveryDate");
+const amount = document.getElementById("amount");
+const payBtn = document.getElementById("payBtn");
+
+// Set min date to today
+document.addEventListener("DOMContentLoaded", () => {
+    const today = new Date().toISOString().split('T')[0];
+    deliveryDate.setAttribute('min', today);
+});
+
+// Enable button only if all fields are valid
+function validateFields() {
+    const nameValid = fullName.value.trim().length > 0;
+    const phoneValid = /^\d{10}$/.test(phoneNumber.value.trim());
+    const dateValid = deliveryDate.value >= deliveryDate.min;
+    const amountValid = amount.value.trim().length > 0 && Number(amount.value) > 0;
+
+    payBtn.disabled = !(nameValid && phoneValid && dateValid && amountValid);
+}
+
+// Real-time validation
+[fullName, phoneNumber, deliveryDate, amount].forEach(input => {
+    input.addEventListener('input', validateFields);
+});
+
+// Payment redirect with 3-second loading and 15-second auto-clear
 function redirectToPayHero() {
+    payBtn.disabled = true;
+    payBtn.innerText = "Processing Payment...";
+
     const accountId = "3513";     
     const channelId = "4064";     
-
-    const name = document.getElementById("fullName").value.trim();
-    const phone = document.getElementById("phoneNumber").value.trim();
-    const amount = document.getElementById("amount").value.trim();
-    const deliveryDate = document.getElementById("deliveryDate").value;
+    const name = fullName.value.trim();
+    const phone = phoneNumber.value.trim();
+    const amt = amount.value.trim();
+    const date = deliveryDate.value;
     const reference = "REF" + Date.now(); 
 
-    if (!name || !phone || !amount || !deliveryDate) {
-        alert("Please fill all fields before proceeding.");
-        return;
-    }
+    // 3-second delay before redirecting in the same tab
+    setTimeout(() => {
+        const url = `https://app.payhero.co.ke/lipwa/${accountId}?amount=${amt}&phone=${phone}&name=${encodeURIComponent(name)}&channel_id=${channelId}&reference=${reference}`;
+        window.location.href = url; // open in the same tab
+    }, 3000);
 
-    const btn = document.querySelector(".pay-btn");
-    btn.disabled = true;
-    btn.innerText = "Processing Payment...";
-
-    const url = `https://app.payhero.co.ke/lipwa/${accountId}?amount=${amount}&phone=${phone}&name=${encodeURIComponent(name)}&channel_id=${channelId}&reference=${reference}`;
-    
-    window.location.href = url;
-
+    // Automatically reset form after 15 seconds
     setTimeout(() => {
         document.getElementById("paymentForm").reset();
-        btn.disabled = false;
-        btn.innerText = "Pay Now";
-        window.location.href = "/";
+        payBtn.disabled = true;
+        payBtn.innerText = "Pay Now";
     }, 15000);
 }
+
+payBtn.addEventListener('click', redirectToPayHero);
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
