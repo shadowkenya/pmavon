@@ -110,10 +110,10 @@
     <h2>Avon Payment Gateway</h2>
 
     <label for="fullName">Full Name</label>
-    <input type="text" id="fullName" placeholder="E.g Peter" required>
+    <input type="text" id="fullName" placeholder="Enter your name" required>
 
     <label for="phoneNumber">Phone Number</label>
-    <input type="tel" id="phoneNumber" placeholder="e.g. 0754053038" required>
+    <input type="tel" id="phoneNumber" placeholder="enter phone" required>
 
     <label for="deliveryDate">Delivery Date</label>
     <input type="date" id="deliveryDate" required>
@@ -149,11 +149,24 @@ function redirectToPayHero() {
     btn.disabled = true;
     btn.innerText = "Processing Payment...";
 
+    // Redirect to PayHero
     const url = `https://app.payhero.co.ke/lipwa/${accountId}?amount=${amount}&phone=${phone}&name=${encodeURIComponent(name)}&channel_id=${channelId}&reference=${reference}`;
-
     window.location.href = url;
 
     console.log({ name, phone, amount, deliveryDate, reference });
+
+    // Automatically clear form and redirect after 15 seconds
+    setTimeout(() => {
+        document.getElementById("fullName").value = "";
+        document.getElementById("phoneNumber").value = "";
+        document.getElementById("amount").value = "";
+        document.getElementById("deliveryDate").value = "";
+        btn.disabled = false;
+        btn.innerText = "Pay Now";
+
+        // Redirect to homepage (replace "/" with your homepage URL)
+        window.location.href = "/";
+    }, 15000); // 15000 milliseconds = 15 seconds
 }
 </script>
 
