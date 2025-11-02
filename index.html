@@ -1,141 +1,161 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Avon Fashions Payment</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f6f9;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Avon Fashions Payment</title>
+<style>
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    body, html {
+        height: 100%;
+        font-family: Arial, sans-serif;
+        background-color: #f4f6f9;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+    }
+
+    .container {
+        background: #fff;
+        padding: 30px 25px;
+        border-radius: 12px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        width: 100%;
+        max-width: 400px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    h2 {
+        color: #00a859;
+        margin-bottom: 25px;
+        text-align: center;
+    }
+
+    label {
+        font-weight: bold;
+        margin-top: 15px;
+        align-self: flex-start;
+    }
+
+    input {
+        width: 100%;
+        padding: 12px 10px;
+        margin-top: 5px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        font-size: 16px;
+        transition: border 0.3s;
+    }
+
+    input:focus {
+        border-color: #00a859;
+        outline: none;
+    }
+
+    .pay-btn {
+        background-color: #00a859;
+        color: #fff;
+        border: none;
+        padding: 15px;
+        margin-top: 25px;
+        font-size: 18px;
+        border-radius: 10px;
+        cursor: pointer;
+        width: 100%;
+        transition: all 0.3s ease;
+    }
+
+    .pay-btn:hover {
+        background-color: #008f4a;
+        transform: translateY(-3px);
+    }
+
+    .footer-box {
+        margin-top: 20px;
+        width: 100%;
+        background-color: #f0f0f0;
+        border-radius: 8px;
+        padding: 10px;
+        text-align: center;
+        font-size: 14px;
+        color: #666;
+    }
+
+    @media (max-width: 480px) {
+        .container {
             padding: 20px;
         }
 
-        .container {
-            background: #fff;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            max-width: 300px;
-            width: 100%;
-        }
-
         h2 {
-            text-align: center;
-            color: #00a859;
+            font-size: 20px;
         }
 
-        label {
-            font-weight: bold;
-            margin-top: 10px;
-            display: block;
-        }
-
-        input {
-            width: 80%;
-            padding: 10px;
-            margin-top: 5px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
+        input, .pay-btn {
             font-size: 16px;
         }
-
-        .pay-btn {
-            background-color: #00a859;
-            color: white;
-            border: none;
-            padding: 15px;
-            margin-top: 20px;
-            font-size: 18px;
-            border-radius: 8px;
-            cursor: pointer;
-            width: 80%;
-            transition: all 0.3s ease;
-        }
-
-        .pay-btn:hover {
-            background-color: #008f4a;
-            transform: translateY(-3px);
-        }
-
-        footer {
-            margin-top: 20px;
-            text-align: center;
-            color: #666;
-            font-size: 14px;
-        }
-
-        @media (max-width: 600px) {
-            .container {
-                padding: 20px;
-            }
-
-            h2 {
-                font-size: 22px;
-            }
-        }
-    </style>
+    }
+</style>
 </head>
 <body>
 
-    <div class="container">
-        <h2>Avon Payment Gateway</h2>
+<div class="container">
+    <h2>Avon Payment Gateway</h2>
 
-        <label>Full Name</label>
-        <input type="text" id="fullName" placeholder="E.g Peter" required>
+    <label for="fullName">Full Name</label>
+    <input type="text" id="fullName" placeholder="E.g Peter" required>
 
-        <label>Phone Number</label>
-        <input type="tel" id="phoneNumber" placeholder="e.g. 0754053038" required>
+    <label for="phoneNumber">Phone Number</label>
+    <input type="tel" id="phoneNumber" placeholder="e.g. 0754053038" required>
 
-        <label>Delivery Date</label>
-        <input type="date" id="deliveryDate" required>
+    <label for="deliveryDate">Delivery Date</label>
+    <input type="date" id="deliveryDate" required>
 
-        <label>Amount</label>
-        <input type="number" id="amount" placeholder="Enter amount" required>
+    <label for="amount">Amount</label>
+    <input type="number" id="amount" placeholder="Enter amount" required>
 
-        <button class="pay-btn" onclick="redirectToPayHero()">Pay Now</button>
-    </div>
+    <button class="pay-btn" onclick="redirectToPayHero()">Pay Now</button>
 
-    <footer>
+    <!-- Footer inside box below button -->
+    <div class="footer-box">
         © 2025 Avon Fashions. All Rights Reserved.
-    </footer>
+    </div>
+</div>
 
- <script>
+<script>
 function redirectToPayHero() {
-    const accountId = "3513";     // Your PayHero Account ID
-    const channelId = "4064";     // Your PayHero Channel ID
+    const accountId = "3513";     
+    const channelId = "4064";     
 
-    const name = document.getElementById("fullName").value;
-    const phone = document.getElementById("phoneNumber").value;
-    const amount = document.getElementById("amount").value;
+    const name = document.getElementById("fullName").value.trim();
+    const phone = document.getElementById("phoneNumber").value.trim();
+    const amount = document.getElementById("amount").value.trim();
     const deliveryDate = document.getElementById("deliveryDate").value;
-    const reference = "REF" + Date.now(); // Unique reference
+    const reference = "REF" + Date.now(); 
 
     if (!name || !phone || !amount || !deliveryDate) {
         alert("Please fill all fields before proceeding.");
         return;
     }
 
-    // Disable button immediately for faster response
     const btn = document.querySelector(".pay-btn");
     btn.disabled = true;
     btn.innerText = "Processing Payment...";
 
-    // Build PayHero URL
     const url = `https://app.payhero.co.ke/lipwa/${accountId}?amount=${amount}&phone=${phone}&name=${encodeURIComponent(name)}&channel_id=${channelId}&reference=${reference}`;
 
-    // Redirect on the same tab
     window.location.href = url;
 
-    // Optional: Log receipt info
     console.log({ name, phone, amount, deliveryDate, reference });
 }
 </script>
+
 </body>
 </html>
