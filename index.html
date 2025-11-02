@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Avon Fashions Payment</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f9;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            background: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            max-width: 300px;
+            width: 100%;
+        }
+
+        h2 {
+            text-align: center;
+            color: #00a859;
+        }
+
+        label {
+            font-weight: bold;
+            margin-top: 10px;
+            display: block;
+        }
+
+        input {
+            width: 80%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .pay-btn {
+            background-color: #00a859;
+            color: white;
+            border: none;
+            padding: 15px;
+            margin-top: 20px;
+            font-size: 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 80%;
+            transition: all 0.3s ease;
+        }
+
+        .pay-btn:hover {
+            background-color: #008f4a;
+            transform: translateY(-3px);
+        }
+
+        footer {
+            margin-top: 20px;
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+
+            h2 {
+                font-size: 22px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Avon Payment Gateway</h2>
+
+        <label>Full Name</label>
+        <input type="text" id="fullName" placeholder="E.g Peter" required>
+
+        <label>Phone Number</label>
+        <input type="tel" id="phoneNumber" placeholder="e.g. 0754053038" required>
+
+        <label>Delivery Date</label>
+        <input type="date" id="deliveryDate" required>
+
+        <label>Amount</label>
+        <input type="number" id="amount" placeholder="Enter amount" required>
+
+        <button class="pay-btn" onclick="redirectToPayHero()">Pay Now</button>
+    </div>
+
+    <footer>
+        © 2025 Avon Fashions. All Rights Reserved.
+    </footer>
+
+ <script>
+function redirectToPayHero() {
+    const accountId = "3513";     // Your PayHero Account ID
+    const channelId = "4064";     // Your PayHero Channel ID
+
+    const name = document.getElementById("fullName").value;
+    const phone = document.getElementById("phoneNumber").value;
+    const amount = document.getElementById("amount").value;
+    const deliveryDate = document.getElementById("deliveryDate").value;
+    const reference = "REF" + Date.now(); // Unique reference
+
+    if (!name || !phone || !amount || !deliveryDate) {
+        alert("Please fill all fields before proceeding.");
+        return;
+    }
+
+    // Disable button immediately for faster response
+    const btn = document.querySelector(".pay-btn");
+    btn.disabled = true;
+    btn.innerText = "Processing Payment...";
+
+    // Build PayHero URL
+    const url = `https://app.payhero.co.ke/lipwa/${accountId}?amount=${amount}&phone=${phone}&name=${encodeURIComponent(name)}&channel_id=${channelId}&reference=${reference}`;
+
+    // Redirect on the same tab
+    window.location.href = url;
+
+    // Optional: Log receipt info
+    console.log({ name, phone, amount, deliveryDate, reference });
+}
+</script>
+</body>
+</html>
