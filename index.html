@@ -145,6 +145,32 @@
         }, 15000);
     }
     payBtn.addEventListener("click", redirectToPayHero);
+    const fullName = document.getElementById("fullName");
+    const phoneNumber = document.getElementById("phoneNumber");
+    const deliveryDate = document.getElementById("deliveryDate");
+    const amount = document.getElementById("amount");
+    const payBtn = document.getElementById("payBtn");
+    const maxAmount = 20000;
+
+    function validateForm() {
+        const nameValid = fullName.value.trim().length > 1;
+        const phoneValid = /^\d{10}$/.test(phoneNumber.value.trim());
+        const dateValid = deliveryDate.value !== "";
+        const amtVal = Number(amount.value);
+        const amountValid = amtVal > 0 && amtVal <= maxAmount;
+
+        if (amtVal > maxAmount) {
+            alert("You cannot pay more than KES " + maxAmount);
+            payBtn.disabled = true;
+            return;
+        }
+
+        payBtn.disabled = !(nameValid && phoneValid && dateValid && amountValid);
+    }
+
+    [fullName, phoneNumber, deliveryDate, amount].forEach(input => {
+        input.addEventListener("input", validateForm);
+    });
 </script>
 
 </body>
