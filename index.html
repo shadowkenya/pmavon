@@ -15,14 +15,16 @@
         justify-content: center;
         align-items: center;
         background: linear-gradient(to bottom, #a0d8ef, #00a859);
+        padding: 10px; /* ✅ Prevents touching screen edges */
     }
     .payment-card {
-        background: #ffffffec;
+        background: #ffffffee;
         border-radius: 15px;
         box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
         width: 100%;
         max-width: 400px;
         padding: 25px;
+        margin: auto; /* ✅ Perfectly centered on all screens */
     }
     h2 {
         color: #00a859;
@@ -50,7 +52,6 @@
         font-size: 1rem;
         text-transform: uppercase;
         animation: blink 1.3s infinite;
-        transition: 0.3s;
     }
     @keyframes blink {
         0% { opacity: 1; }
@@ -60,12 +61,21 @@
     .pay-btn:disabled {
         background-color: #a5d6a7;
         animation: none;
+        cursor: not-allowed;
     }
     .footer-box {
         margin-top: 12px;
         text-align: center;
         font-size: 0.8rem;
         color: #555;
+    }
+
+    /* ✅ Better small-screen handling */
+    @media (max-width: 480px) {
+        .payment-card {
+            padding: 20px;
+            max-width: 95%;
+        }
     }
 </style>
 </head>
@@ -76,13 +86,14 @@
     <h2>Avon Fashions</h2>
     <form id="paymentForm" novalidate>
         <div class="mb-3">
-            <input type="text" class="form-control" id="fullName" placeholder="Enter your full name" required>
+            <input type="text" class="form-control" id="fullName" placeholder="Full Name" required>
         </div>
         <div class="mb-3">
             <input type="tel" class="form-control" id="phoneNumber" maxlength="10" placeholder="Phone (10 digits)" required>
         </div>
         <div class="mb-3">
-            <input type="date" class="form-control" id="deliveryDate" required>
+            <!-- ✅ Added placeholder visibility for small screens -->
+            <input type="date" class="form-control" id="deliveryDate" placeholder="Delivery Date" onfocus="this.showPicker()" required>
         </div>
         <div class="mb-3">
             <input type="number" class="form-control" id="amount" placeholder="Amount (KES)" required>
@@ -93,11 +104,11 @@
 </div>
 
 <script>
-    // Prevent past dates
+    // ✅ Prevent selecting past dates
     const today = new Date().toISOString().split("T")[0];
     document.getElementById("deliveryDate").setAttribute("min", today);
 
-    // Form Validation
+    // ✅ Validation logic
     const fullName = document.getElementById("fullName");
     const phoneNumber = document.getElementById("phoneNumber");
     const deliveryDate = document.getElementById("deliveryDate");
@@ -105,18 +116,18 @@
     const payBtn = document.getElementById("payBtn");
 
     function validateForm() {
-        const nameValid = fullName.value.trim().length > 1;
-        const phoneValid = /^\d{10}$/.test(phoneNumber.value.trim());
-        const dateValid = deliveryDate.value !== "";
-        const amountValid = Number(amount.value) > 0;
-        payBtn.disabled = !(nameValid && phoneValid && dateValid && amountValid);
+        payBtn.disabled = !(
+            fullName.value.trim().length > 1 &&
+            /^\d{10}$/.test(phoneNumber.value.trim()) &&
+            deliveryDate.value &&
+            Number(amount.value) > 0
+        );
     }
-
     [fullName, phoneNumber, deliveryDate, amount].forEach(input => {
         input.addEventListener("input", validateForm);
     });
 
-    // Redirect to PayHero
+    // ✅ Redirect to PayHero
     function redirectToPayHero() {
         payBtn.disabled = true;
         payBtn.innerText = "Processing...";
@@ -124,21 +135,15 @@
         const accountId = "3513";
         const channelId = "4064";
         const reference = "REF" + Date.now();
-        const name = encodeURIComponent(fullName.value.trim());
-        const phone = phoneNumber.value.trim();
-        const amt = amount.value.trim();
+        const url = `https://app.payhero.co.ke/lipwa/${accountId}?amount=${amount.value.trim()}&phone=${phoneNumber.value.trim()}&name=${encodeURIComponent(fullName.value.trim())}&channel_id=${channelId}&reference=${reference}`;
 
-        setTimeout(() => {
-            window.location.href = `https://app.payhero.co.ke/lipwa/${accountId}?amount=${amt}&phone=${phone}&name=${name}&channel_id=${channelId}&reference=${reference}`;
-        }, 3000);
-
+        setTimeout(() => window.location.href = url, 3000);
         setTimeout(() => {
             document.getElementById("paymentForm").reset();
             payBtn.innerText = "Pay Now";
             payBtn.disabled = true;
         }, 15000);
     }
-
     payBtn.addEventListener("click", redirectToPayHero);
 </script>
 
