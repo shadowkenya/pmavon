@@ -18,8 +18,6 @@ body {
 }
 .droplet {
     position: absolute;
-    width: 6px;
-    height: 6px;
     background: rgba(255,255,255,0.7);
     border-radius: 50%;
     animation: drop 4s infinite linear;
@@ -47,11 +45,6 @@ body {
 .form-control {
     border-radius: 10px;
     padding: 10px;
-    font-size: 0.95rem;
-}
-.form-control:focus {
-    box-shadow: 0 0 8px rgba(0,168,89,0.6);
-    border-color: #00a859;
 }
 .pay-btn {
     background-color: #00a859;
@@ -93,26 +86,22 @@ body {
         <div class="mb-3">
             <input type="text" class="form-control form-control-sm" id="fullName" placeholder="Your Name" required>
         </div>
-
         <div class="mb-3">
             <input type="tel" class="form-control form-control-sm" id="phoneNumber" placeholder="Enter 10-digit phone" maxlength="10" pattern="\\d{10}" required>
         </div>
-
         <div class="mb-3">
             <input type="date" class="form-control form-control-sm" id="deliveryDate" required>
         </div>
-
         <div class="mb-3">
             <input type="number" class="form-control form-control-sm" id="amount" placeholder="Amount" required>
         </div>
-
         <button type="button" class="btn pay-btn" id="payBtn" disabled>Pay Now</button>
     </form>
     <div class="footer-box">© 2025 Avon Payment Gateway. All Rights Reserved.</div>
 </div>
 
 <script>
-// Water droplets
+// Generate droplets
 const container = document.getElementById('droplets-container');
 for(let i = 0; i < 60; i++) {
     const drop = document.createElement('div');
@@ -135,14 +124,16 @@ deliveryDate.min = new Date().toISOString().split("T")[0];
 
 function validateFields() {
     const nameValid = fullName.value.trim().length > 0;
-    const phoneValid = /^\d{10}$/.test(phoneNumber.value.trim());
+    const phoneValid = /^\\d{10}$/.test(phoneNumber.value.trim());
     const dateValid = deliveryDate.value && deliveryDate.value >= deliveryDate.min;
-    const amountValid = amount.value.trim().length > 0 && Number(amount.value) > 0;
+    const amountValid = Number(amount.value) > 0;
     payBtn.disabled = !(nameValid && phoneValid && dateValid && amountValid);
 }
-[fullName, phoneNumber, deliveryDate, amount].forEach(input => input.addEventListener('input', validateFields));
+[fullName, phoneNumber, deliveryDate, amount].forEach(input => 
+    input.addEventListener('input', validateFields)
+);
 
-// Payment Function
+// Faster Payment Function (1 sec + auto-reset 15 sec)
 function redirectToPayHero() {
     payBtn.disabled = true;
     payBtn.innerText = "Processing...";
@@ -154,16 +145,20 @@ function redirectToPayHero() {
     const amt = amount.value.trim();
     const reference = "REF" + Date.now();
 
+    // ✅ Faster redirect (1 second)
     setTimeout(() => {
-        window.location.href = `https://app.payhero.co.ke/lipwa/${accountId}?amount=${amt}&phone=${phone}&name=${encodeURIComponent(name)}&channel_id=${channelId}&reference=${reference}`;
-    }, 3000);
+        window.location.href = 
+        `https://app.payhero.co.ke/lipwa/${accountId}?amount=${amt}&phone=${phone}&name=${encodeURIComponent(name)}&channel_id=${channelId}&reference=${reference}`;
+    }, 1000);
 
+    // ✅ Clear form after 15 seconds
     setTimeout(() => {
         document.getElementById("paymentForm").reset();
-        payBtn.disabled = true;
         payBtn.innerText = "Pay Now";
+        payBtn.disabled = true;
     }, 15000);
 }
+
 payBtn.addEventListener('click', redirectToPayHero);
 </script>
 </body>
