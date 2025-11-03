@@ -1,98 +1,184 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Avon Fashions Payment</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart World Solution Payment</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<style>
+/* ---------- Body & Background ---------- */
+body {
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(to bottom, #a0d8ef, #00a859);
+    overflow: hidden;
+}
 
-    <style>
-        body {
-            background: linear-gradient(to bottom, #f4f6f9, #dde3ea);
-            font-family: 'Poppins', sans-serif;
-        }
-        .payment-box {
-            max-width: 450px;
-            margin: 50px auto;
-            background: #ffffff;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            padding: 25px;
-            border-radius: 15px;
-        }
-        .btn-pay {
-            width: 100%;
-            font-weight: bold;
-            transition: 0.3s;
-        }
-        .btn-pay:hover {
-            transform: scale(1.03);
-        }
-        .loading-text {
-            display: none;
-            text-align: center;
-            font-weight: bold;
-            color: #198754;
-        }
-    </style>
+/* Water droplets */
+.droplet {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: rgba(255,255,255,0.7);
+    border-radius: 50%;
+    animation: drop 4s infinite linear;
+}
+@keyframes drop {
+    0% { transform: translateY(-10px); opacity: 0; }
+    50% { opacity: 1; }
+    100% { transform: translateY(100vh); opacity: 0; }
+}
+
+/* ---------- Payment Card ---------- */
+.payment-card {
+    background: rgba(255,255,255,0.95);
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    width: 100%;
+    max-width: 360px;
+    padding: 25px 20px;
+    transition: all 0.3s ease;
+}
+
+/* ---------- Card Header ---------- */
+.payment-card h2 {
+    color: #00a859;
+    text-align: center;
+    font-size: 1.6rem;
+    margin-bottom: 20px;
+    font-weight: bold;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+
+/* ---------- Form Controls ---------- */
+.form-control {
+    border-radius: 10px;
+    padding: 10px;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+}
+.form-control:focus {
+    box-shadow: 0 0 8px rgba(0,168,89,0.6);
+    border-color: #00a859;
+}
+
+/* ---------- Blinking Button ---------- */
+.pay-btn {
+    background-color: #00a859;
+    border: none;
+    width: 100%;
+    font-size: 1.05rem;
+    padding: 12px;
+    border-radius: 10px;
+    font-weight: bold;
+    color: #fff;
+    text-transform: uppercase;
+    animation: blink 1.3s infinite;
+    transition: all 0.3s ease;
+}
+@keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 0.4; }
+    100% { opacity: 1; }
+}
+.pay-btn:disabled {
+    background-color: #a5d6a7;
+    opacity: 1;
+    animation: none;
+    cursor: not-allowed;
+}
+
+/* ---------- Footer ---------- */
+.footer-box {
+    margin-top: 15px;
+    text-align: center;
+    font-size: 0.8rem;
+    color: #444;
+}
+</style>
 </head>
 <body>
 
-<div class="payment-box">
-    <h3 class="text-center mb-3">Avon Fashions Payment</h3>
-    <p class="text-center text-muted">Fill in your details to proceed with payment</p>
+<!-- Water droplets -->
+<div id="droplets-container"></div>
 
-    <form id="paymentForm">
+<div class="payment-card">
+    <h2>Smart World Solution</h2>
+    <form id="paymentForm" novalidate>
         <div class="mb-3">
-            <label class="form-label">Full Name</label>
-            <input type="text" id="name" class="form-control" placeholder="Enter your full name" required>
+            <input type="text" class="form-control form-control-sm" id="fullName" placeholder="Your name" required>
         </div>
-
         <div class="mb-3">
-            <label class="form-label">Phone Number (254...)</label>
-            <input type="tel" id="phone" class="form-control" placeholder="2547XXXXXXXX" required>
+            <input type="tel" maxlength="10" pattern="\d{10}" class="form-control form-control-sm" id="phoneNumber" placeholder="Enter phone" required>
         </div>
-
         <div class="mb-3">
-            <label class="form-label">Amount (KES)</label>
-            <input type="number" id="amount" class="form-control" placeholder="e.g 500" required>
+            <input type="date" class="form-control form-control-sm" id="deliveryDate" required>
         </div>
-
-        <button type="submit" id="payBtn" class="btn btn-success btn-pay">
-            Pay Now
-        </button>
+        <div class="mb-3">
+            <input type="number" class="form-control form-control-sm" id="amount" placeholder="Amount" required>
+        </div>
+        <button type="button" class="btn pay-btn" id="payBtn" disabled>Pay Now</button>
     </form>
-
-    <p id="loading" class="loading-text mt-3">Processing Payment... Please wait</p>
+    <div class="footer-box">© 2025 Smart World Solution. All Rights Reserved.</div>
 </div>
 
 <script>
-    document.getElementById('paymentForm').addEventListener('submit', function (e) {
-        e.preventDefault();
+/* Water droplets */
+const container = document.getElementById('droplets-container');
+for(let i=0;i<60;i++){
+    const drop = document.createElement('div');
+    drop.classList.add('droplet');
+    drop.style.left = Math.random()*100 + 'vw';
+    drop.style.animationDuration = 2 + Math.random()*3 + 's';
+    drop.style.animationDelay = Math.random()*5 + 's';
+    drop.style.width = drop.style.height = 2 + Math.random()*5 + 'px';
+    container.appendChild(drop);
+}
 
-        let name = document.getElementById('name').value.trim();
-        let phone = document.getElementById('phone').value.trim();
-        let amount = document.getElementById('amount').value.trim();
+/* Form Validation */
+const fullName = document.getElementById("fullName");
+const phoneNumber = document.getElementById("phoneNumber");
+const deliveryDate = document.getElementById("deliveryDate");
+const amount = document.getElementById("amount");
+const payBtn = document.getElementById("payBtn");
 
-        if (name === "" || phone === "" || amount === "" || amount <= 0) {
-            alert("Please fill all fields correctly.");
-            return;
-        }
+function validateFields() {
+    const nameValid = fullName.value.trim().length > 0;
+    const phoneValid = /^\d{10}$/.test(phoneNumber.value.trim());
+    const dateValid = deliveryDate.value.trim().length > 0;
+    const amountValid = amount.value.trim().length > 0 && Number(amount.value) > 0;
+    payBtn.disabled = !(nameValid && phoneValid && dateValid && amountValid);
+}
+[fullName, phoneNumber, deliveryDate, amount].forEach(input => input.addEventListener('input', validateFields));
 
-        // Show loading text for 3 seconds
-        document.getElementById('loading').style.display = 'block';
-        document.getElementById('payBtn').disabled = true;
-        document.getElementById('payBtn').innerText = "Processing...";
+/* Payment Redirect */
+function redirectToPayHero() {
+    payBtn.disabled = true;
+    payBtn.innerText = "Processing...";
 
-        setTimeout(function () {
-            // Generate unique reference
-            let reference = "REF" + Date.now();
+    const accountId = "3513";
+    const channelId = "4064";
+    const name = fullName.value.trim();
+    const phone = phoneNumber.value.trim();
+    const amt = amount.value.trim();
+    const reference = "REF" + Date.now();
 
-            // Redirect to PayHero
-            let url = `https://app.payhero.co.ke/lipwa?account=3513&amount=${amount}&phone=${phone}&reference=${reference}`;
-            window.location.href = url;
-        }, 3000);
-    });
+    setTimeout(() => {
+        const url = `https://app.payhero.co.ke/lipwa/${accountId}?amount=${amt}&phone=${phone}&name=${encodeURIComponent(name)}&channel_id=${channelId}&reference=${reference}`;
+        window.location.href = url;
+    }, 3000);
+
+    setTimeout(() => {
+        document.getElementById("paymentForm").reset();
+        payBtn.disabled = true;
+        payBtn.innerText = "Pay Now";
+    }, 15000);
+}
+payBtn.addEventListener('click', redirectToPayHero);
 </script>
-
 </body>
 </html>
