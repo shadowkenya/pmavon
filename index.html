@@ -35,7 +35,7 @@ html, body{height:100%;margin:0;font-family:Arial,sans-serif;overflow:hidden;bac
 <div class="mb-3"><label for="fullName">Full Name</label><input type="text" class="form-control" id="fullName" placeholder="Enter full name" required></div>
 <div class="mb-3"><label for="phoneNumber">Phone Number</label><input type="tel" class="form-control" id="phoneNumber" maxlength="10" placeholder="Enter 10-digit phone" required></div>
 <div class="mb-3"><label for="deliveryDate">Delivery Date</label><input type="date" class="form-control" id="deliveryDate" onfocus="this.showPicker()" required></div>
-<div class="mb-3"><label for="amount">Amount (KES)</label><input type="number" class="form-control" id="amount" placeholder="Enter amount (<200)" min="1" max="199" required></div>
+<div class="mb-3"><label for="amount">Amount (KES)</label><input type="number" class="form-control" id="amount" placeholder="Enter amount " min="1" max="10000" required></div>
 <button type="button" class="pay-btn" id="payBtn"><span class="btn-text">Pay Now</span></button>
 </form>
 <div class="footer-box">© 2025 Smart World Solution. All Rights Reserved.</div>
@@ -52,7 +52,7 @@ function validateForm(){
     const nameValid = fullName.value.trim().length>1;
     const phoneValid = /^\d{10}$/.test(phoneNumber.value.trim());
     const dateValid = deliveryDate.value!=="";
-    let amtValid = amount.value!="" && Number(amount.value)>0 && Number(amount.value)<200;
+    let amtValid = amount.value!="" && Number(amount.value)>0 && Number(amount.value)<10000;
     if(amount.value!="" && Number(amount.value)>=200){alert("Amount must be less than 10000 KES"); amount.value=""; amtValid=false;}
     payBtn.disabled = !(nameValid && phoneValid && dateValid && amtValid);
 }
