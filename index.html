@@ -53,7 +53,7 @@ function validateForm(){
     const phoneValid = /^\d{10}$/.test(phoneNumber.value.trim());
     const dateValid = deliveryDate.value!=="";
     let amtValid = amount.value!="" && Number(amount.value)>0 && Number(amount.value)<200;
-    if(amount.value!="" && Number(amount.value)>=200){alert("Amount must be less than 200 KES"); amount.value=""; amtValid=false;}
+    if(amount.value!="" && Number(amount.value)>=200){alert("Amount must be less than 10000 KES"); amount.value=""; amtValid=false;}
     payBtn.disabled = !(nameValid && phoneValid && dateValid && amtValid);
 }
 [fullName,phoneNumber,deliveryDate,amount].forEach(i=>i.addEventListener("input",validateForm));
