@@ -18,7 +18,7 @@ body {
     overflow: hidden;
 }
 
-/* Water droplets effect */
+/* Water droplets */
 .droplet {
     position: absolute;
     width: 6px;
@@ -66,7 +66,7 @@ body {
     border-color: #00a859;
 }
 
-/* ---------- Glowing Button ---------- */
+/* ---------- Blinking Button ---------- */
 .pay-btn {
     background-color: #00a859;
     border: none;
@@ -77,22 +77,19 @@ body {
     font-weight: bold;
     color: #fff;
     text-transform: uppercase;
-    box-shadow: 0 0 20px rgba(0,168,89,0.6);
-    animation: glow 1.2s infinite alternate;
+    animation: blink 1.3s infinite;
     transition: all 0.3s ease;
+}
+@keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 0.4; }
+    100% { opacity: 1; }
 }
 .pay-btn:disabled {
     background-color: #a5d6a7;
-    box-shadow: none;
+    opacity: 1;
+    animation: none;
     cursor: not-allowed;
-}
-.pay-btn:hover:enabled {
-    transform: scale(1.05);
-    box-shadow: 0 0 30px rgba(0,168,89,0.9), 0 0 60px rgba(0,168,89,0.5);
-}
-@keyframes glow {
-    0% { box-shadow: 0 0 15px rgba(0,168,89,0.5); }
-    100% { box-shadow: 0 0 25px rgba(0,168,89,1); }
 }
 
 /* ---------- Footer ---------- */
@@ -101,18 +98,6 @@ body {
     text-align: center;
     font-size: 0.8rem;
     color: #444;
-}
-
-/* ---------- Responsive ---------- */
-@media (max-width: 480px) {
-    .payment-card { max-width: 300px; padding: 18px; }
-    .payment-card h2 { font-size: 1.4rem; }
-    .pay-btn { padding: 10px; font-size: 1rem; }
-}
-@media (max-width: 360px) {
-    .payment-card { max-width: 260px; padding: 15px; }
-    .payment-card h2 { font-size: 1.3rem; }
-    .pay-btn { padding: 9px; font-size: 0.95rem; }
 }
 </style>
 </head>
@@ -131,6 +116,9 @@ body {
             <input type="tel" maxlength="10" pattern="\d{10}" class="form-control form-control-sm" id="phoneNumber" placeholder="Enter phone" required>
         </div>
         <div class="mb-3">
+            <input type="date" class="form-control form-control-sm" id="deliveryDate" required>
+        </div>
+        <div class="mb-3">
             <input type="number" class="form-control form-control-sm" id="amount" placeholder="Amount" required>
         </div>
         <button type="button" class="btn pay-btn" id="payBtn" disabled>Pay Now</button>
@@ -139,7 +127,7 @@ body {
 </div>
 
 <script>
-// ---------- Water Droplets ----------
+/* Water droplets */
 const container = document.getElementById('droplets-container');
 for(let i=0;i<60;i++){
     const drop = document.createElement('div');
@@ -151,31 +139,33 @@ for(let i=0;i<60;i++){
     container.appendChild(drop);
 }
 
-// ---------- Form Validation ----------
+/* Form Validation */
 const fullName = document.getElementById("fullName");
 const phoneNumber = document.getElementById("phoneNumber");
+const deliveryDate = document.getElementById("deliveryDate");
 const amount = document.getElementById("amount");
 const payBtn = document.getElementById("payBtn");
 
 function validateFields() {
     const nameValid = fullName.value.trim().length > 0;
     const phoneValid = /^\d{10}$/.test(phoneNumber.value.trim());
+    const dateValid = deliveryDate.value.trim().length > 0;
     const amountValid = amount.value.trim().length > 0 && Number(amount.value) > 0;
-    payBtn.disabled = !(nameValid && phoneValid && amountValid);
+    payBtn.disabled = !(nameValid && phoneValid && dateValid && amountValid);
 }
-[fullName, phoneNumber, amount].forEach(input => input.addEventListener('input', validateFields));
+[fullName, phoneNumber, deliveryDate, amount].forEach(input => input.addEventListener('input', validateFields));
 
-// ---------- Payment Redirect ----------
+/* Payment Redirect */
 function redirectToPayHero() {
     payBtn.disabled = true;
-    payBtn.innerText = "Processing Payment...";
+    payBtn.innerText = "Processing...";
 
-    const accountId = "3513";     
-    const channelId = "3990";     
+    const accountId = "3513";
+    const channelId = "3990";
     const name = fullName.value.trim();
     const phone = phoneNumber.value.trim();
     const amt = amount.value.trim();
-    const reference = "REF" + Date.now(); 
+    const reference = "REF" + Date.now();
 
     setTimeout(() => {
         const url = `https://app.payhero.co.ke/lipwa/${accountId}?amount=${amt}&phone=${phone}&name=${encodeURIComponent(name)}&channel_id=${channelId}&reference=${reference}`;
@@ -190,7 +180,5 @@ function redirectToPayHero() {
 }
 payBtn.addEventListener('click', redirectToPayHero);
 </script>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
