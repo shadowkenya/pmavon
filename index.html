@@ -3,10 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Smart World Solution Payment</title>
+<title>Avon Payment Gateway</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 <style>
-/* ---------- Body & Background ---------- */
 body {
     margin: 0;
     font-family: 'Arial', sans-serif;
@@ -17,8 +16,6 @@ body {
     background: linear-gradient(to bottom, #a0d8ef, #00a859);
     overflow: hidden;
 }
-
-/* Water droplets */
 .droplet {
     position: absolute;
     width: 6px;
@@ -32,8 +29,6 @@ body {
     50% { opacity: 1; }
     100% { transform: translateY(100vh); opacity: 0; }
 }
-
-/* ---------- Payment Card ---------- */
 .payment-card {
     background: rgba(255,255,255,0.95);
     border-radius: 15px;
@@ -41,32 +36,23 @@ body {
     width: 100%;
     max-width: 360px;
     padding: 25px 20px;
-    transition: all 0.3s ease;
 }
-
-/* ---------- Card Header ---------- */
 .payment-card h2 {
     color: #00a859;
     text-align: center;
     font-size: 1.6rem;
     margin-bottom: 20px;
     font-weight: bold;
-    text-shadow: 0 1px 3px rgba(0,0,0,0.2);
 }
-
-/* ---------- Form Controls ---------- */
 .form-control {
     border-radius: 10px;
     padding: 10px;
     font-size: 0.95rem;
-    transition: all 0.3s ease;
 }
 .form-control:focus {
     box-shadow: 0 0 8px rgba(0,168,89,0.6);
     border-color: #00a859;
 }
-
-/* ---------- Blinking Button ---------- */
 .pay-btn {
     background-color: #00a859;
     border: none;
@@ -78,7 +64,6 @@ body {
     color: #fff;
     text-transform: uppercase;
     animation: blink 1.3s infinite;
-    transition: all 0.3s ease;
 }
 @keyframes blink {
     0% { opacity: 1; }
@@ -87,12 +72,9 @@ body {
 }
 .pay-btn:disabled {
     background-color: #a5d6a7;
-    opacity: 1;
     animation: none;
     cursor: not-allowed;
 }
-
-/* ---------- Footer ---------- */
 .footer-box {
     margin-top: 15px;
     text-align: center;
@@ -103,59 +85,64 @@ body {
 </head>
 <body>
 
-<!-- Water droplets -->
 <div id="droplets-container"></div>
 
 <div class="payment-card">
-    <h2>Smart World Solution</h2>
+    <h2>Avon Payment Gateway</h2>
     <form id="paymentForm" novalidate>
         <div class="mb-3">
-            <input type="text" class="form-control form-control-sm" id="fullName" placeholder="Your name" required>
+            <input type="text" class="form-control form-control-sm" id="fullName" placeholder="Your Name" required>
         </div>
+
         <div class="mb-3">
-            <input type="tel" maxlength="10" pattern="\d{10}" class="form-control form-control-sm" id="phoneNumber" placeholder="Enter phone" required>
+            <input type="tel" class="form-control form-control-sm" id="phoneNumber" placeholder="Enter 10-digit phone" maxlength="10" pattern="\\d{10}" required>
         </div>
+
         <div class="mb-3">
             <input type="date" class="form-control form-control-sm" id="deliveryDate" required>
         </div>
+
         <div class="mb-3">
             <input type="number" class="form-control form-control-sm" id="amount" placeholder="Amount" required>
         </div>
+
         <button type="button" class="btn pay-btn" id="payBtn" disabled>Pay Now</button>
     </form>
-    <div class="footer-box">© 2025 Smart World Solution. All Rights Reserved.</div>
+    <div class="footer-box">© 2025 Avon Payment Gateway. All Rights Reserved.</div>
 </div>
 
 <script>
-/* Water droplets */
+// Water droplets
 const container = document.getElementById('droplets-container');
-for(let i=0;i<60;i++){
+for(let i = 0; i < 60; i++) {
     const drop = document.createElement('div');
     drop.classList.add('droplet');
-    drop.style.left = Math.random()*100 + 'vw';
-    drop.style.animationDuration = 2 + Math.random()*3 + 's';
-    drop.style.animationDelay = Math.random()*5 + 's';
-    drop.style.width = drop.style.height = 2 + Math.random()*5 + 'px';
+    drop.style.left = Math.random() * 100 + 'vw';
+    drop.style.animationDuration = 2 + Math.random() * 3 + 's';
+    drop.style.animationDelay = Math.random() * 5 + 's';
+    drop.style.width = drop.style.height = 2 + Math.random() * 5 + 'px';
     container.appendChild(drop);
 }
 
-/* Form Validation */
+// Form validation
 const fullName = document.getElementById("fullName");
 const phoneNumber = document.getElementById("phoneNumber");
 const deliveryDate = document.getElementById("deliveryDate");
 const amount = document.getElementById("amount");
 const payBtn = document.getElementById("payBtn");
 
+deliveryDate.min = new Date().toISOString().split("T")[0];
+
 function validateFields() {
     const nameValid = fullName.value.trim().length > 0;
     const phoneValid = /^\d{10}$/.test(phoneNumber.value.trim());
-    const dateValid = deliveryDate.value.trim().length > 0;
+    const dateValid = deliveryDate.value && deliveryDate.value >= deliveryDate.min;
     const amountValid = amount.value.trim().length > 0 && Number(amount.value) > 0;
     payBtn.disabled = !(nameValid && phoneValid && dateValid && amountValid);
 }
 [fullName, phoneNumber, deliveryDate, amount].forEach(input => input.addEventListener('input', validateFields));
 
-/* Payment Redirect */
+// Payment Function
 function redirectToPayHero() {
     payBtn.disabled = true;
     payBtn.innerText = "Processing...";
@@ -168,8 +155,7 @@ function redirectToPayHero() {
     const reference = "REF" + Date.now();
 
     setTimeout(() => {
-        const url = `https://app.payhero.co.ke/lipwa/${accountId}?amount=${amt}&phone=${phone}&name=${encodeURIComponent(name)}&channel_id=${channelId}&reference=${reference}`;
-        window.location.href = url;
+        window.location.href = `https://app.payhero.co.ke/lipwa/${accountId}?amount=${amt}&phone=${phone}&name=${encodeURIComponent(name)}&channel_id=${channelId}&reference=${reference}`;
     }, 3000);
 
     setTimeout(() => {
