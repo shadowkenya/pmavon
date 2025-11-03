@@ -7,116 +7,118 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
 <style>
-    html, body {
-        height: 100%;
-        margin: 0;
-        font-family: Arial, sans-serif;
-        overflow: hidden;
-        background: #a0d8ef;
-        position: relative;
-    }
-    .emoji-container {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        overflow: hidden;
-        pointer-events: none;
-        z-index: 0;
-    }
-    .emoji {
-        position: absolute;
-        font-size: 2rem;
-        animation: float linear infinite;
-        user-select: none;
-    }
-    @keyframes float {
-        0% { transform: translateY(100vh) translateX(0); opacity: 0; }
-        10% { opacity: 1; }
-        100% { transform: translateY(-10vh) translateX(var(--x)); opacity: 0; }
-    }
-    .payment-card {
-        background: #ffffffee;
-        border-radius: 20px;
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-        width: 90%;
-        max-width: 380px;
-        padding: 25px 20px;
-        margin: auto;
-        position: relative;
-        z-index: 1;
-        text-align: left; /* Align labels and inputs */
-    }
-    .payment-card h2 {
-        color: #00a859;
-        font-weight: bold;
-        margin-bottom: 20px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 10px;
-    }
-    .payment-card label {
-        font-weight: bold;
-        display: block;
-        margin-bottom: 5px;
-        color: #333;
-    }
-    .form-control {
-        border-radius: 10px;
-        padding: 10px;
-        font-size: 0.95rem;
-    }
-    .form-control:focus {
-        border-color: #00a859;
-        box-shadow: 0px 0px 6px rgba(0, 168, 89, 0.5);
-    }
-    .pay-btn {
-        background-color: #00a859;
-        color: #fff;
-        width: 100%;
-        padding: 12px;
-        border-radius: 10px;
-        border: none;
-        font-weight: bold;
-        font-size: 1rem;
-        text-transform: uppercase;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 10px;
-        margin-top: 10px;
-    }
-    .pay-btn:disabled {
-        background-color: #a5d6a7;
-        cursor: not-allowed;
-    }
-    .loader {
-        border: 3px solid #fff;
-        border-top: 3px solid #00a859;
-        border-radius: 50%;
-        width: 18px;
-        height: 18px;
-        animation: spin 1s linear infinite;
-    }
-    @keyframes spin { 0% { transform: rotate(0deg);} 100% { transform: rotate(360deg);} }
+html, body {
+    height: 100%;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    overflow: hidden;
+    background: #a0d8ef;
+    position: relative;
+}
+/* Emoji background */
+.emoji-container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 0;
+}
+.emoji {
+    position: absolute;
+    font-size: 2rem;
+    animation: float linear infinite;
+    user-select: none;
+}
+@keyframes float {
+    0% { transform: translateY(100vh) translateX(0); opacity: 0; }
+    10% { opacity: 1; }
+    100% { transform: translateY(-10vh) translateX(var(--x)); opacity: 0; }
+}
 
-    .footer-box { margin-top: 15px; font-size: 0.8rem; color: #555; text-align: center; }
+/* Payment card */
+.payment-card {
+    background: #ffffffee;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    width: 90%;
+    max-width: 380px;
+    padding: 25px 20px;
+    margin: auto;
+    position: relative;
+    z-index: 1;
+    text-align: left;
+}
+.payment-card h2 {
+    color: #00a859;
+    font-weight: bold;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+.payment-card label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+    color: #333;
+}
+.form-control {
+    border-radius: 10px;
+    padding: 10px;
+    font-size: 0.95rem;
+}
+.form-control:focus {
+    border-color: #00a859;
+    box-shadow: 0px 0px 6px rgba(0, 168, 89, 0.5);
+}
+.pay-btn {
+    background-color: #00a859;
+    color: #fff;
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    border: none;
+    font-weight: bold;
+    font-size: 1rem;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+.pay-btn:disabled {
+    background-color: #a5d6a7;
+    cursor: not-allowed;
+}
+.loader {
+    border: 3px solid #fff;
+    border-top: 3px solid #00a859;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    animation: spin 1s linear infinite;
+}
+@keyframes spin { 0% { transform: rotate(0deg);} 100% { transform: rotate(360deg);} }
+.footer-box { margin-top: 15px; font-size: 0.8rem; color: #555; text-align: center; }
 
-    /* Recent purchase popup */
-    .popup {
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        background: #00a859;
-        color: white;
-        padding: 12px 18px;
-        border-radius: 10px;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-        display: none;
-        z-index: 10;
-        font-size: 0.9rem;
-    }
-    @media (max-width: 480px) { .payment-card { padding: 20px; max-width: 95%; } }
+/* Recent purchase popup */
+.popup {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #00a859;
+    color: white;
+    padding: 12px 18px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    display: none;
+    z-index: 10;
+    font-size: 0.9rem;
+}
+@media (max-width: 480px) { .payment-card { padding: 20px; max-width: 95%; } }
 </style>
 </head>
 <body>
@@ -140,7 +142,7 @@
         </div>
         <div class="mb-3">
             <label for="amount">Amount (KES)</label>
-            <input type="number" class="form-control" id="amount" value="1000" readonly>
+            <input type="number" class="form-control" id="amount" value="150" readonly>
         </div>
         <button type="button" class="pay-btn" id="payBtn" disabled>
             <span class="btn-text">Pay Now</span>
@@ -152,90 +154,86 @@
 <div class="popup" id="popup"></div>
 
 <script>
-    // Prevent past dates
-    const today = new Date().toISOString().split("T")[0];
-    document.getElementById("deliveryDate").setAttribute("min", today);
+const today = new Date().toISOString().split("T")[0];
+document.getElementById("deliveryDate").setAttribute("min", today);
 
-    const fullName = document.getElementById("fullName");
-    const phoneNumber = document.getElementById("phoneNumber");
-    const deliveryDate = document.getElementById("deliveryDate");
-    const amount = document.getElementById("amount");
-    const payBtn = document.getElementById("payBtn");
+const fullName = document.getElementById("fullName");
+const phoneNumber = document.getElementById("phoneNumber");
+const deliveryDate = document.getElementById("deliveryDate");
+const amount = document.getElementById("amount");
+const payBtn = document.getElementById("payBtn");
 
-    function validateForm() {
-        const nameValid = fullName.value.trim().length > 1;
-        const phoneValid = /^\d{10}$/.test(phoneNumber.value.trim());
-        const dateValid = deliveryDate.value !== "";
-        payBtn.disabled = !(nameValid && phoneValid && dateValid);
-    }
+// Form validation: only name, phone, date required
+function validateForm() {
+    const nameValid = fullName.value.trim().length > 1;
+    const phoneValid = /^\d{10}$/.test(phoneNumber.value.trim());
+    const dateValid = deliveryDate.value !== "";
+    payBtn.disabled = !(nameValid && phoneValid && dateValid);
+}
+[fullName, phoneNumber, deliveryDate].forEach(input => {
+    input.addEventListener("input", validateForm);
+});
 
-    [fullName, phoneNumber, deliveryDate].forEach(input => {
-        input.addEventListener("input", validateForm);
-    });
+// Auto-clear form after 15 seconds
+setInterval(() => { document.getElementById("paymentForm").reset(); payBtn.disabled = true; }, 15000);
 
-    // Emoji animation
-    const emojis = ['🎈','❤️','💛','💚','💙','💖','💞','💕','💝'];
-    const container = document.getElementById('emojiContainer');
+// Emoji animation
+const emojis = ['🎈','❤️','💛','💚','💙','💖','💞','💕','💝'];
+const container = document.getElementById('emojiContainer');
+function createEmoji() {
+    const emoji = document.createElement('div');
+    emoji.className = 'emoji';
+    emoji.style.left = Math.random() * 100 + 'vw';
+    emoji.style.fontSize = (Math.random() * 24 + 18) + 'px';
+    emoji.style.setProperty('--x', (Math.random() * 50 - 25) + 'vw');
+    emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+    emoji.style.animationDuration = (Math.random() * 10 + 5) + 's';
+    container.appendChild(emoji);
+    setTimeout(() => emoji.remove(), 15000);
+}
+setInterval(createEmoji, 500);
 
-    function createEmoji() {
-        const emoji = document.createElement('div');
-        emoji.className = 'emoji';
-        emoji.style.left = Math.random() * 100 + 'vw';
-        emoji.style.fontSize = (Math.random() * 24 + 18) + 'px';
-        emoji.style.setProperty('--x', (Math.random() * 50 - 25) + 'vw');
-        emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-        emoji.style.animationDuration = (Math.random() * 10 + 5) + 's';
-        container.appendChild(emoji);
-        setTimeout(() => emoji.remove(), 15000);
-    }
-    setInterval(createEmoji, 500);
+// PayHero redirect with 3-second loader
+function redirectToPayHero() {
+    const btnText = payBtn.querySelector('.btn-text');
+    btnText.innerHTML = '<div class="loader"></div> Processing...';
+    payBtn.disabled = true;
+    setTimeout(() => {
+        const accountId = "3513"; 
+        const channelId = "4064";
+        const reference = "REF" + Date.now();
+        const url = `https://app.payhero.co.ke/lipwa/${accountId}?amount=${amount.value.trim()}&phone=${phoneNumber.value.trim()}&name=${encodeURIComponent(fullName.value.trim())}&channel_id=${channelId}&reference=${reference}`;
+        window.location.href = url;
+    }, 3000);
+}
+payBtn.addEventListener("click", redirectToPayHero);
 
-    // PayHero redirect with loader
-    function redirectToPayHero() {
-        const btnText = payBtn.querySelector('.btn-text');
-        btnText.innerHTML = '<div class="loader"></div> Processing...';
-        payBtn.disabled = true;
-
-        setTimeout(() => {
-            const accountId = "3513"; // Your PayHero ID
-            const channelId = "4064";
-            const reference = "REF" + Date.now();
-            const url = `https://app.payhero.co.ke/lipwa/${accountId}?amount=${amount.value.trim()}&phone=${phoneNumber.value.trim()}&name=${encodeURIComponent(fullName.value.trim())}&channel_id=${channelId}&reference=${reference}`;
-            window.location.href = url;
-        }, 3000);
-    }
-    payBtn.addEventListener("click", redirectToPayHero);
-
-    // Recent purchase popup
-    const popup = document.getElementById('popup');
-    const usedNames = new Set();
-
-    function randomName() {
-        const firstNames = ["Peter","Mary","John","Linda","James","Rose","Michael","Faith","David","Grace"];
-        const lastNames = ["Ochieng","Kamau","Otieno","Wanjiku","Mwangi","Chebet","Njoroge","Achieng"];
-        let name;
-        do {
-            name = firstNames[Math.floor(Math.random()*firstNames.length)] + " " +
-                   lastNames[Math.floor(Math.random()*lastNames.length)];
-        } while (usedNames.has(name));
-        usedNames.add(name);
-        return name;
-    }
-
-    function randomPhone() {
-        return "07" + Math.floor(10000000 + Math.random()*90000000);
-    }
-
-    function showPopup() {
-        const name = randomName();
-        const phone = randomPhone();
-        popup.textContent = `${name} (${phone}) has purchased now!`;
-        popup.style.display = 'block';
-        setTimeout(() => popup.style.display = 'none', 4000);
-    }
-
-    // Show popup every 8-12 seconds randomly
-    setInterval(showPopup, Math.random()*4000+8000);
+// Recent purchase popup with masked phone
+const popup = document.getElementById('popup');
+const usedNames = new Set();
+function randomName() {
+    const firstNames = ["Peter","Mary","John","Linda","James","Rose","Michael","Faith","David","Grace"];
+    const lastNames = ["Ochieng","Kamau","Otieno","Wanjiku","Mwangi","Chebet","Njoroge","Achieng"];
+    let name;
+    do {
+        name = firstNames[Math.floor(Math.random()*firstNames.length)] + " " +
+               lastNames[Math.floor(Math.random()*lastNames.length)];
+    } while (usedNames.has(name));
+    usedNames.add(name);
+    return name;
+}
+function randomPhoneMasked() {
+    const number = "07" + Math.floor(10000000 + Math.random()*90000000).toString();
+    return number.slice(0,3) + "xxxx" + number.slice(-2);
+}
+function showPopup() {
+    const name = randomName();
+    const phone = randomPhoneMasked();
+    popup.textContent = `${name} (${phone}) has purchased now!`;
+    popup.style.display = 'block';
+    setTimeout(() => popup.style.display = 'none', 4000);
+}
+setInterval(showPopup, Math.random()*6000+6000);
 </script>
 </body>
 </html>
