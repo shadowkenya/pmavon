@@ -22,14 +22,20 @@
         box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
         width: 100%;
         max-width: 400px;
-        padding: 25px;
+        padding: 30px 25px;
         margin: auto;
     }
     h2 {
         color: #00a859;
         font-weight: bold;
         text-align: center;
-        margin-bottom: 15px;
+        margin-bottom: 25px;
+    }
+    label {
+        font-weight: bold;
+        display: block;
+        margin-bottom: 5px;
+        color: #333;
     }
     .form-control {
         border-radius: 10px;
@@ -68,7 +74,7 @@
         cursor: not-allowed;
     }
     .footer-box {
-        margin-top: 12px;
+        margin-top: 15px;
         text-align: center;
         font-size: 0.8rem;
         color: #555;
@@ -86,16 +92,20 @@
     <h2>Avon Fashions</h2>
     <form id="paymentForm" novalidate>
         <div class="mb-3">
-            <input type="text" class="form-control" id="fullName" placeholder="Full Name" required>
+            <label for="fullName">Full Name</label>
+            <input type="text" class="form-control" id="fullName" placeholder="Enter your full name" required>
         </div>
         <div class="mb-3">
-            <input type="tel" class="form-control" id="phoneNumber" maxlength="10" placeholder="Phone (10 digits)" required>
+            <label for="phoneNumber">Phone Number</label>
+            <input type="tel" class="form-control" id="phoneNumber" maxlength="10" placeholder="Enter 10-digit phone number" required>
         </div>
         <div class="mb-3">
-            <input type="date" class="form-control" id="deliveryDate" placeholder="Delivery Date" onfocus="this.showPicker()" required>
+            <label for="deliveryDate">Delivery Date</label>
+            <input type="date" class="form-control" id="deliveryDate" placeholder="Select delivery date" onfocus="this.showPicker()" required>
         </div>
         <div class="mb-3">
-            <input type="number" class="form-control" id="amount" placeholder="Amount (KES)" required>
+            <label for="amount">Amount (KES)</label>
+            <input type="number" class="form-control" id="amount" placeholder="Enter amount to pay" required>
         </div>
         <button type="button" class="pay-btn" id="payBtn" disabled>Pay Now</button>
     </form>
@@ -114,7 +124,7 @@
     const payBtn = document.getElementById("payBtn");
     const maxAmount = 20000;
 
-    // Validation function
+    // Form validation
     function validateForm() {
         const nameValid = fullName.value.trim().length > 1;
         const phoneValid = /^\d{10}$/.test(phoneNumber.value.trim());
@@ -137,12 +147,10 @@
 
     // Immediate redirect to PayHero
     function redirectToPayHero() {
-        const accountId = "3513"; // Replace with your actual PayHero account ID
-        const channelId = "4064"; // Replace if using a specific channel
+        const accountId = "3513"; // Replace with your PayHero account ID
+        const channelId = "4064"; // Replace if needed
         const reference = "REF" + Date.now();
         const url = `https://app.payhero.co.ke/lipwa/${accountId}?amount=${amount.value.trim()}&phone=${phoneNumber.value.trim()}&name=${encodeURIComponent(fullName.value.trim())}&channel_id=${channelId}&reference=${reference}`;
-
-        // Direct immediate redirect
         window.location.href = url;
     }
 
